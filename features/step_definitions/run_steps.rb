@@ -15,9 +15,9 @@ When(/^I run `([^`]+)` with the last( two)? commit shas?( while allowing errors)
 end
 
 
-When(/^I run `(.+?)` and enter (.+?)$/) do |command, input|
+When(/^I run `(.+?)` and enter (.+?)( while allowing errors)?$/) do |command, input, allow_failures|
   inputs = prepare_user_input input
-  @result = run command, inputs: inputs, allow_failures: true
+  @result = run command, inputs: inputs, allow_failures: allow_failures
 end
 
 
