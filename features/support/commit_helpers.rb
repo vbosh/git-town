@@ -76,7 +76,7 @@ end
 
 # Returns the array of the file names committed for the supplied sha
 def committed_files sha
-  array_output_of "git diff-tree --no-commit-id --name-only -r #{sha}"
+  array_output_of "git diff-tree --no-commit-id --name-only -c -r #{sha}"
 end
 
 
@@ -87,12 +87,13 @@ def commits_for_branch branch_name, keys
   array_output_of("git log #{branch_name} --format='%h|%s|%ae' --topo-order --reverse").map do |commit|
     sha, message, author = commit.split('|')
     next if message == 'Initial commit'
-    filenames = committed_files sha
+    file_names = committed_files(sha)
+    file_content = content_of(file: file_names[0], for_sha: sha) if file_names.count > 0
     {
       author: author,
       message: message,
-      file_name: filenames,
-      file_content: content_of(file: filenames[0], for_sha: sha)
+      file_name: file_names,
+      file_content: file_content || ''
     }.select { |key, _| keys.include? key }
   end.compact
 end

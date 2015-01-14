@@ -8,9 +8,9 @@ Feature: git hack: handling conflicting remote main branch updates (with open ch
   Background:
     Given I have a feature branch named "existing_feature"
     And the following commits exist in my repository
-      | BRANCH | LOCATION | MESSAGE                   | FILE NAME        | FILE CONTENT   |
-      | main   | remote   | conflicting remote commit | conflicting_file | remote content |
-      |        | local    | conflicting local commit  | conflicting_file | local content  |
+      | BRANCH | LOCATION | MESSAGE                   | FILE NAME        | FILE CONTENT               |
+      | main   | remote   | conflicting remote commit | conflicting_file | remote conflicting content |
+      |        | local    | conflicting local commit  | conflicting_file | local conflicting content  |
     And I am on the "existing_feature" branch
     And I have an uncommitted file with name: "uncommitted" and content: "stuff"
     When I run `git hack new_feature` while allowing errors
@@ -61,15 +61,11 @@ Feature: git hack: handling conflicting remote main branch updates (with open ch
     And I end up on the "new_feature" branch
     And I still have an uncommitted file with name: "uncommitted" and content: "stuff"
     And now I have the following commits
-      | BRANCH      | LOCATION         | MESSAGE                   | FILE NAME        |
-      | main        | local and remote | conflicting remote commit | conflicting_file |
-      |             |                  | conflicting local commit  | conflicting_file |
-      | new_feature | local            | conflicting remote commit | conflicting_file |
-      |             |                  | conflicting local commit  | conflicting_file |
-    And now I have the following committed files
-      | BRANCH      | FILES            | CONTENT          |
-      | main        | conflicting_file | resolved content |
-      | new_feature | conflicting_file | resolved content |
+      | BRANCH      | LOCATION         | MESSAGE                   | FILE NAME        | FILE CONTENT               |
+      | main        | local and remote | conflicting remote commit | conflicting_file | remote conflicting content |
+      |             |                  | conflicting local commit  | conflicting_file | resolved content           |
+      | new_feature | local            | conflicting remote commit | conflicting_file | remote conflicting content |
+      |             |                  | conflicting local commit  | conflicting_file | resolved content           |
 
 
   Scenario: continuing after resolving conflicts and continuing the rebase
@@ -83,12 +79,8 @@ Feature: git hack: handling conflicting remote main branch updates (with open ch
     And I end up on the "new_feature" branch
     And I still have an uncommitted file with name: "uncommitted" and content: "stuff"
     And now I have the following commits
-      | BRANCH      | LOCATION         | MESSAGE                   | FILE NAME        |
-      | main        | local and remote | conflicting remote commit | conflicting_file |
-      |             |                  | conflicting local commit  | conflicting_file |
-      | new_feature | local            | conflicting remote commit | conflicting_file |
-      |             |                  | conflicting local commit  | conflicting_file |
-    And now I have the following committed files
-      | BRANCH      | FILES            | CONTENT          |
-      | main        | conflicting_file | resolved content |
-      | new_feature | conflicting_file | resolved content |
+      | BRANCH      | LOCATION         | MESSAGE                   | FILE NAME        | FILE CONTENT               |
+      | main        | local and remote | conflicting remote commit | conflicting_file | remote conflicting content |
+      |             |                  | conflicting local commit  | conflicting_file | resolved content           |
+      | new_feature | local            | conflicting remote commit | conflicting_file | remote conflictingcontent  |
+      |             |                  | conflicting local commit  | conflicting_file | resolved content           |

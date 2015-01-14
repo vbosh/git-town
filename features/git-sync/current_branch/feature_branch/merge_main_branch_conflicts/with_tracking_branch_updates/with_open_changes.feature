@@ -3,10 +3,10 @@ Feature: Git Sync: handling merge conflicts between feature and main branch when
   Background:
     Given I have a feature branch named "feature"
     And the following commits exist in my repository
-      | BRANCH  | LOCATION | MESSAGE                    | FILE NAME        | FILE CONTENT    |
-      | main    | local    | conflicting main commit    | conflicting_file | main content    |
-      | feature | local    | conflicting feature commit | conflicting_file | feature content |
-      |         | remote   | feature commit             | feature_file     | feature content |
+      | BRANCH  | LOCATION | MESSAGE                    | FILE NAME        | FILE CONTENT                |
+      | main    | local    | conflicting main commit    | conflicting_file | main conflicting content    |
+      | feature | local    | conflicting feature commit | conflicting_file | feature conflicting content |
+      |         | remote   | feature commit             | feature_file     | feature content             |
     And I am on the "feature" branch
     And I have an uncommitted file with name: "uncommitted" and content: "stuff"
     And I run `git sync` while allowing errors
@@ -69,18 +69,13 @@ Feature: Git Sync: handling merge conflicts between feature and main branch when
     And I am still on the "feature" branch
     And I again have an uncommitted file with name: "uncommitted" and content: "stuff"
     And I still have the following commits
-      | BRANCH  | LOCATION         | MESSAGE                                                    | FILE NAME        |
-      | main    | local and remote | conflicting main commit                                    | conflicting_file |
-      | feature | local and remote | conflicting feature commit                                 | conflicting_file |
-      |         |                  | feature commit                                             | feature_file     |
-      |         |                  | Merge remote-tracking branch 'origin/feature' into feature |                  |
-      |         |                  | conflicting main commit                                    | conflicting_file |
-      |         |                  | Merge branch 'main' into feature                           |                  |
-    And I still have the following committed files
-      | BRANCH  | FILES            | CONTENT          |
-      | main    | conflicting_file | main content     |
-      | feature | conflicting_file | resolved content |
-      | feature | feature_file     | feature content  |
+      | BRANCH  | LOCATION         | MESSAGE                                                    | FILE NAME        | FILE CONTENT                |
+      | main    | local and remote | conflicting main commit                                    | conflicting_file | main conflicting content    |
+      | feature | local and remote | conflicting feature commit                                 | conflicting_file | feature conflicting content |
+      |         |                  | feature commit                                             | feature_file     | feature content             |
+      |         |                  | Merge remote-tracking branch 'origin/feature' into feature | feature_file     | feature content             |
+      |         |                  | conflicting main commit                                    | conflicting_file | main conflicting content    |
+      |         |                  | Merge branch 'main' into feature                           | conflicting_file | resolved content            |
 
 
   Scenario: continuing after resolving conflicts and comitting

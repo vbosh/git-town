@@ -54,13 +54,10 @@ Feature: git sync: resolving conflicting remote feature branch updates when sync
       | feature | git push                 |
     And I am still on the "feature" branch
     And now I have the following commits
-      | BRANCH  | LOCATION         | MESSAGE                                                    | FILE NAME        |
-      | feature | local and remote | local conflicting commit                                   | conflicting_file |
-      |         |                  | remote conflicting commit                                  | conflicting_file |
-      |         |                  | Merge remote-tracking branch 'origin/feature' into feature |                  |
-    And now I have the following committed files
-      | BRANCH  | FILES            | CONTENT          |
-      | feature | conflicting_file | resolved content |
+      | BRANCH  | LOCATION         | MESSAGE                                                    | FILE NAME        | FILE CONTENT               |
+      | feature | local and remote | local conflicting commit                                   | conflicting_file | local conflicting content  |
+      |         |                  | remote conflicting commit                                  | conflicting_file | remote conflicting content |
+      |         |                  | Merge remote-tracking branch 'origin/feature' into feature | conflicting_file | resolved content           |
 
 
   Scenario: continuing after resolving conflicts
@@ -72,10 +69,7 @@ Feature: git sync: resolving conflicting remote feature branch updates when sync
       | feature | git push                 |
     And I am still on the "feature" branch
     And now I have the following commits
-      | BRANCH  | LOCATION         | MESSAGE                                                    | FILE NAME        |
-      | feature | local and remote | local conflicting commit                                   | conflicting_file |
-      |         |                  | remote conflicting commit                                  | conflicting_file |
-      |         |                  | Merge remote-tracking branch 'origin/feature' into feature |                  |
-    And now I have the following committed files
-      | BRANCH  | FILES            | CONTENT          |
-      | feature | conflicting_file | resolved content |
+      | BRANCH  | LOCATION         | MESSAGE                                                    | FILE NAME        | FILE CONTENT               |
+      | feature | local and remote | local conflicting commit                                   | conflicting_file | local conflicting content  |
+      |         |                  | remote conflicting commit                                  | conflicting_file | remote conflicting content |
+      |         |                  | Merge remote-tracking branch 'origin/feature' into feature | conflicting_file | resolved content           |

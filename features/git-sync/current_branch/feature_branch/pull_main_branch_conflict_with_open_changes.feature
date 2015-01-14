@@ -64,15 +64,11 @@ Feature: git sync: resolving conflicting remote main branch updates when syncing
     And I am still on the "feature" branch
     And I still have an uncommitted file with name: "uncommitted" and content: "stuff"
     And now I have the following commits
-      | BRANCH  | LOCATION         | MESSAGE                   | FILE NAME        |
-      | main    | local and remote | conflicting remote commit | conflicting_file |
-      |         |                  | conflicting local commit  | conflicting_file |
-      | feature | local and remote | conflicting remote commit | conflicting_file |
-      |         |                  | conflicting local commit  | conflicting_file |
-    And now I have the following committed files
-      | BRANCH  | FILES            | CONTENT          |
-      | main    | conflicting_file | resolved content |
-      | feature | conflicting_file | resolved content |
+      | BRANCH  | LOCATION         | MESSAGE                   | FILE NAME        | FILE CONTENT               |
+      | main    | local and remote | conflicting remote commit | conflicting_file | remote conflicting content |
+      |         |                  | conflicting local commit  | conflicting_file | resolved content           |
+      | feature | local and remote | conflicting remote commit | conflicting_file | remote conflicting content |
+      |         |                  | conflicting local commit  | conflicting_file | resolved content           |
 
 
   Scenario: continuing after resolving conflicts and continuing the rebase
@@ -89,12 +85,8 @@ Feature: git sync: resolving conflicting remote main branch updates when syncing
     And I am still on the "feature" branch
     And I still have an uncommitted file with name: "uncommitted" and content: "stuff"
     And now I have the following commits
-      | BRANCH  | LOCATION         | MESSAGE                   | FILE NAME        |
-      | main    | local and remote | conflicting remote commit | conflicting_file |
-      |         |                  | conflicting local commit  | conflicting_file |
-      | feature | local and remote | conflicting remote commit | conflicting_file |
-      |         |                  | conflicting local commit  | conflicting_file |
-    And now I have the following committed files
-      | BRANCH  | FILES            | CONTENT          |
-      | main    | conflicting_file | resolved content |
-      | feature | conflicting_file | resolved content |
+      | BRANCH  | LOCATION         | MESSAGE                   | FILE NAME        | FILE CONTENT               |
+      | main    | local and remote | conflicting remote commit | conflicting_file | remote conflicting content |
+      |         |                  | conflicting local commit  | conflicting_file | resolved content           |
+      | feature | local and remote | conflicting remote commit | conflicting_file | remote conflicting content |
+      |         |                  | conflicting local commit  | conflicting_file | resolved content           |

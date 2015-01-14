@@ -49,15 +49,11 @@ Feature: git hack: handling conflicting remote main branch updates while startin
       | main   | git checkout -b new_feature main |
     And I end up on the "new_feature" branch
     And now I have the following commits
-      | BRANCH      | LOCATION         | MESSAGE                   | FILE NAME        |
-      | main        | local and remote | conflicting remote commit | conflicting_file |
-      |             |                  | conflicting local commit  | conflicting_file |
-      | new_feature | local            | conflicting remote commit | conflicting_file |
-      |             |                  | conflicting local commit  | conflicting_file |
-    And now I have the following committed files
-      | BRANCH      | FILES            | CONTENT          |
-      | main        | conflicting_file | resolved content |
-      | new_feature | conflicting_file | resolved content |
+      | BRANCH      | LOCATION         | MESSAGE                   | FILE NAME        | FILE CONTENT     |
+      | main        | local and remote | conflicting remote commit | conflicting_file | remote content   |
+      |             |                  | conflicting local commit  | conflicting_file | resolved content |
+      | new_feature | local            | conflicting remote commit | conflicting_file | remote content   |
+      |             |                  | conflicting local commit  | conflicting_file | resolved content |
 
 
   Scenario: continuing after resolving conflicts and continuing the rebase
@@ -69,12 +65,8 @@ Feature: git hack: handling conflicting remote main branch updates while startin
       | main   | git checkout -b new_feature main |
     And I end up on the "new_feature" branch
     And now I have the following commits
-      | BRANCH      | LOCATION         | MESSAGE                   | FILE NAME        |
-      | main        | local and remote | conflicting remote commit | conflicting_file |
-      |             |                  | conflicting local commit  | conflicting_file |
-      | new_feature | local            | conflicting remote commit | conflicting_file |
-      |             |                  | conflicting local commit  | conflicting_file |
-    And now I have the following committed files
-      | BRANCH      | FILES            | CONTENT          |
-      | main        | conflicting_file | resolved content |
-      | new_feature | conflicting_file | resolved content |
+      | BRANCH      | LOCATION         | MESSAGE                   | FILE NAME        | FILE CONTENT     |
+      | main        | local and remote | conflicting remote commit | conflicting_file | remote content   |
+      |             |                  | conflicting local commit  | conflicting_file | resolved content |
+      | new_feature | local            | conflicting remote commit | conflicting_file | remote content   |
+      |             |                  | conflicting local commit  | conflicting_file | resolved content |

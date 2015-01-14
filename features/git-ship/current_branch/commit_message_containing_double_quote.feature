@@ -32,8 +32,5 @@ Feature: git ship: shipping the current feature branch
     And there are no more feature branches
     And there are no open changes
     And I have the following commits
-      | BRANCH | LOCATION         | MESSAGE                            | FILE NAME    |
-      | main   | local and remote | message containing "double quotes" | feature_file |
-    And now I have the following committed files
-      | BRANCH | FILES        |
-      | main   | feature_file |
+      | BRANCH | LOCATION         | MESSAGE                            | FILE NAME    | FILE CONTENT    |
+      | main   | local and remote | message containing "double quotes" | feature_file | feature content |
