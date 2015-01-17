@@ -4,12 +4,12 @@
 
 
 # Unique string that identifies the current directory
-temp_filename_suffix="$(pwd | tr '/' '_')"
+git_folder="$(pwd)/.git"
 
 
 # Command lists
-export steps_file="/tmp/${program}_${temp_filename_suffix}"
-export undo_steps_file="/tmp/${program}_undo_${temp_filename_suffix}"
+export steps_file="${git_folder}/${program}_STEPS"
+export undo_steps_file="${git_folder}/${program}_UNDO_STEPS"
 
 
 function has_lines {
