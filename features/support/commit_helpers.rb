@@ -1,8 +1,13 @@
 # Returns the commits in the current directory
-def commits_in_repo
-  existing_branches.map do |branch_name|
-    commits_for_branch branch_name
-  end.flatten
+def commits_in_repo keys = [:author, :file_content, :file_name, :message]
+  out = {}
+
+  existing_branches.each do |branch_name|
+    commits = commits_for_branch branch_name, keys
+    out[branch_name] = commits unless commits.empty?
+  end
+
+  out
 end
 
 
@@ -21,14 +26,14 @@ end
 
 
 def create_remote_commit commit_data
-  at_path coworker_repository_path do
+  in_secondary_repository do
     create_local_commit commit_data.merge(pull: true, push: true)
   end
 end
 
 
 def create_upstream_commit commit_data
-  at_path upstream_local_repository_path do
+  in_repository :upstream_developer do
     create_local_commit commit_data.merge(push: true)
   end
 end
@@ -41,7 +46,7 @@ def create_commit commit_data
   when %w(local) then create_local_commit commit_data
   when %w(remote) then create_remote_commit commit_data
   when %w(local remote) then create_local_commit commit_data.merge(push: true)
-  when %w(upstream) then  create_upstream_commit commit_data
+  when %w(upstream) then create_upstream_commit commit_data
   else fail "Unknown commit location: #{location}"
   end
 end
@@ -76,15 +81,22 @@ end
 
 
 # Returns the commits in the currently checked out branch
-def commits_for_branch branch_name
-  array_output_of("git log #{branch_name} --oneline").map do |commit|
-    sha, message = commit.split(' ', 2)
-
-    unless message == 'Initial commit'
-      { branch: branch_name, message: message, file_name: committed_files(sha) }
-    end
+#
+# rubocop:disable MethodLength
+def commits_for_branch branch_name, keys
+  array_output_of("git log #{branch_name} --format='%h|%s|%ae' --topo-order --reverse").map do |commit|
+    sha, message, author = commit.split('|')
+    next if message == 'Initial commit'
+    filenames = committed_files sha
+    {
+      author: author,
+      message: message,
+      file_name: filenames,
+      file_content: content_of(file: filenames[0], for_sha: sha)
+    }.select { |key, _| keys.include? key }
   end.compact
 end
+# rubocop:enable MethodLength
 
 
 def default_commit_attributes
@@ -95,6 +107,19 @@ def default_commit_attributes
     location: 'local and remote',
     branch: current_branch_name
   }
+end
+
+
+def group_expected_commits_by_branch commits_array
+  out = {}
+
+  commits_array.each do |commit_data|
+    branch = commit_data.delete(:branch)
+    out[branch] ||= []
+    out[branch] << commit_data
+  end
+
+  out
 end
 
 
@@ -124,7 +149,7 @@ end
 
 # Returns an array of length count with the shas of the most recent commits
 def recent_commit_shas count
-  array_output_of("git rev-list HEAD -n #{count}")
+  array_output_of("git rev-list HEAD -n #{count}").reverse
 end
 
 
@@ -136,7 +161,8 @@ def verify_commits commits_array
     normalize_expected_commit_data commit_data
   end.flatten
 
-  actual_commits = commits_in_repo
+  expected_commits = group_expected_commits_by_branch expected_commits
+  actual_commits = commits_in_repo commits_array[0].keys
 
-  expect(actual_commits).to match_array(expected_commits), -> { commits_diff(actual_commits, expected_commits) }
+  expect(actual_commits).to eql(expected_commits), -> { commits_diff(actual_commits, expected_commits) }
 end

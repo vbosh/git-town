@@ -73,7 +73,7 @@ end
 
 
 def run_shell_command command, inputs
-  result = OpenStruct.new(command: command, location: Dir.pwd.split(/[_\/]/).last)
+  result = OpenStruct.new(command: command, location: Pathname.new(Dir.pwd).basename)
   command = "#{shell_overrides}; #{command} 2>&1"
 
   status = Open4.popen4(command) do |_pid, stdin, stdout, _stderr|
@@ -99,4 +99,10 @@ end
 
 def should_print_command_output? command, debug
   debug || ENV['DEBUG'] || (ENV['DEBUG_COMMANDS'] && git_town_command?(command))
+end
+
+
+# Output of last `run` without text formatting (ANSI escape sequences)
+def unformatted_last_run_output
+  @last_run_result.out.gsub(/\e[^m]+m/, '')
 end

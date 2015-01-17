@@ -42,13 +42,7 @@ Feature: git sync: resolving conflicting remote feature branch updates when sync
     And I am still on the "feature" branch
     And I still have an uncommitted file with name: "uncommitted" and content: "stuff"
     And there is no merge in progress
-    And I still have the following commits
-      | BRANCH  | LOCATION | MESSAGE                   | FILE NAME        |
-      | feature | local    | local conflicting commit  | conflicting_file |
-      |         | remote   | remote conflicting commit | conflicting_file |
-    And I still have the following committed files
-      | BRANCH  | FILES            | CONTENT                   |
-      | feature | conflicting_file | local conflicting content |
+    And I am left with my original commits
 
 
   @finishes-with-non-empty-stash
@@ -73,9 +67,9 @@ Feature: git sync: resolving conflicting remote feature branch updates when sync
     And I still have an uncommitted file with name: "uncommitted" and content: "stuff"
     And now I have the following commits
       | BRANCH  | LOCATION         | MESSAGE                                                    | FILE NAME        |
-      | feature | local and remote | Merge remote-tracking branch 'origin/feature' into feature |                  |
+      | feature | local and remote | local conflicting commit                                   | conflicting_file |
       |         |                  | remote conflicting commit                                  | conflicting_file |
-      |         |                  | local conflicting commit                                   | conflicting_file |
+      |         |                  | Merge remote-tracking branch 'origin/feature' into feature |                  |
     And now I have the following committed files
       | BRANCH  | FILES            | CONTENT          |
       | feature | conflicting_file | resolved content |
@@ -93,9 +87,9 @@ Feature: git sync: resolving conflicting remote feature branch updates when sync
     And I still have an uncommitted file with name: "uncommitted" and content: "stuff"
     And now I have the following commits
       | BRANCH  | LOCATION         | MESSAGE                                                    | FILE NAME        |
-      | feature | local and remote | Merge remote-tracking branch 'origin/feature' into feature |                  |
+      | feature | local and remote | local conflicting commit                                   | conflicting_file |
       |         |                  | remote conflicting commit                                  | conflicting_file |
-      |         |                  | local conflicting commit                                   | conflicting_file |
+      |         |                  | Merge remote-tracking branch 'origin/feature' into feature |                  |
     And now I have the following committed files
       | BRANCH  | FILES            | CONTENT          |
       | feature | conflicting_file | resolved content |

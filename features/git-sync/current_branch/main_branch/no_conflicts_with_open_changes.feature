@@ -29,9 +29,5 @@ Feature: git sync: syncing the main branch (with open changes)
     And all branches are now synchronized
     And I have the following commits
       | BRANCH | LOCATION         | MESSAGE       | FILE NAME   |
-      | main   | local and remote | local commit  | local_file  |
-      |        |                  | remote commit | remote_file |
-    And now I have the following committed files
-      | BRANCH | FILES       |
-      | main   | local_file  |
-      | main   | remote_file |
+      | main   | local and remote | remote commit | remote_file |
+      |        |                  | local commit  | local_file  |

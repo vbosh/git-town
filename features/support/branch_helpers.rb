@@ -14,7 +14,7 @@ def branches_for_repository repository
   case repository
   when 'local' then existing_local_branches
   when 'remote' then existing_remote_branches
-  when 'coworker' then at_path(coworker_repository_path) { existing_local_branches }
+  when 'coworker' then in_repository(:coworker) { existing_local_branches }
   else fail "Unknown repository: #{repository}"
   end
 end
@@ -40,14 +40,8 @@ end
 
 
 # Returns the names of all existing local branches.
-#
-# The branches are ordered this ways:
-# * main branch
-# * feature branches ordered alphabetically
 def existing_local_branches
-  actual_branches = array_output_of "git branch | tr -d '*'"
-  actual_main_branch = actual_branches.delete 'main'
-  [actual_main_branch].concat(actual_branches)
+  array_output_of "git branch | tr -d '*'"
 end
 
 

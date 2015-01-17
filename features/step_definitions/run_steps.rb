@@ -1,6 +1,6 @@
 When(/^(I|my coworker) runs? `([^`]+)`( while allowing errors)?$/) do |who, commands, allow_failures|
-  path = (who == 'I') ? local_repository_path : coworker_repository_path
-  at_path(path) do
+  user = (who == 'I') ? :developer : :coworker
+  in_repository user do
     commands.split(';').each do |command|
       run command.strip, allow_failures: allow_failures
     end
@@ -58,11 +58,28 @@ Then(/^it runs the Git commands$/) do |expected_steps|
 end
 
 
-Then(/^I see "(.*)"$/) do |string|
-  expect(@last_run_result.out).to include string
+Then(/^I see no output$/) do
+  expect(@last_run_result.out).to eql ''
 end
 
 
-Then(/^I see the (.+?) man page$/) do |manpage|
+Then(/^I don't see "(.*)"$/) do |string|
+  expect(@last_run_result.out).not_to include(string)
+end
+
+
+Then(/^I see "(.*)"$/) do |string|
+  actual = unformatted_last_run_output.strip
+  expect(actual).to eql string
+end
+
+
+Then(/^I see$/) do |output|
+  actual = unformatted_last_run_output
+  expect(actual).to eql "#{output}\n"
+end
+
+
+Then(/^I see the "(.+?)" man page$/) do |manpage|
   expect(@last_run_result.out).to eql "man called with: #{manpage}\n"
 end
