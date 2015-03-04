@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 source "$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )/helpers/helpers.sh"
+source "$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )/steps/sync_steps.sh"
 
 
 # Returns the source for a new Bitbucket pull request
@@ -22,5 +23,18 @@ else
   echo_usage "Unsupported hosting service. Pull requests can only be created on Bitbucket and GitHub"
   exit_with_error newline
 fi
+
+
+function preconditions {
+  sync_preconditions
+}
+
+
+function steps {
+  sync_steps
+}
+
+
+run "$@"
 
 open_browser "https://$domain/$repository/$pr_path"

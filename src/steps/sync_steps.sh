@@ -1,0 +1,77 @@
+#!/usr/bin/env bash
+source "$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )/helpers/helpers.sh"
+
+
+function branches_to_sync {
+  if [ "$sync_all" = true ]; then
+    echo "$main_branch_name"
+    local_branches_without_main
+  elif [ "$(is_feature_branch "$initial_branch_name")" = true ]; then
+    echo "$main_branch_name"
+    echo "$initial_branch_name"
+  else
+    echo "$initial_branch_name"
+  fi
+}
+
+
+function sync_preconditions {
+  fetch
+
+  should_push_tags=false
+  sync_all=false
+
+  if [ "$1" = "--all" ]; then
+    sync_all=true
+  elif [ "$(is_feature_branch "$initial_branch_name")" = false ]; then
+    should_push_tags=true
+  fi
+}
+
+
+function skip_message_prefix {
+  echo "To skip the sync of the '$(get_current_branch_name)' branch"
+}
+
+
+function skippable {
+  if [ "$(rebase_in_progress)" = true ] && [ "$(get_current_branch_name)" = "$main_branch_name" ]; then
+    echo false
+  else
+    echo true
+  fi
+}
+
+
+function sync_steps {
+  if [ "$initial_open_changes" = true ]; then
+    echo "stash_open_changes"
+  fi
+
+  branches_to_sync | while read branch_name; do
+    echo "checkout $branch_name"
+
+    if [ "$(is_feature_branch "$branch_name")" = true ]; then
+      echo "merge_tracking_branch"
+      echo "merge $main_branch_name"
+    else
+      echo "rebase_tracking_branch"
+    fi
+
+    echo "push"
+  done
+
+  if [ "$should_push_tags" = true ]; then
+    echo "push_tags"
+  fi
+
+  echo "checkout $initial_branch_name"
+
+  if [ "$initial_open_changes" = true ]; then
+    echo "restore_open_changes"
+  fi
+}
+
+
+run "$@"
+
