@@ -43,10 +43,10 @@ Feature: git sync --all: handling merge conflicts between feature branch and mai
     And I end up on the "main" branch
     And I again have an uncommitted file with name: "uncommitted" and content: "stuff"
     And I have the following commits
-      | BRANCH   | LOCATION         | MESSAGE         | FILE NAME        |
-      | main     | local and remote | main commit     | conflicting_file |
-      | feature1 | local and remote | feature1 commit | conflicting_file |
-      | feature2 | local and remote | feature2 commit | feature2_file    |
+      | BRANCH   | LOCATION         | MESSAGE         | FILE NAME        | FILE CONTENT     |
+      | main     | local and remote | main commit     | conflicting_file | main content     |
+      | feature1 | local and remote | feature1 commit | conflicting_file | feature1 content |
+      | feature2 | local and remote | feature2 commit | feature2_file    | feature2 content |
 
 
   Scenario: skipping
@@ -69,6 +69,12 @@ Feature: git sync --all: handling merge conflicts between feature branch and mai
       | feature2 | local and remote | feature2 commit                   | feature2_file    |
       |          |                  | main commit                       | conflicting_file |
       |          |                  | Merge branch 'main' into feature2 |                  |
+    And now I have the following committed files
+      | BRANCH   | FILES            | CONTENT          |
+      | main     | conflicting_file | main content     |
+      | feature1 | conflicting_file | feature1 content |
+      | feature2 | feature2_file    | feature2 content |
+      | feature2 | conflicting_file | main content     |
 
 
   @finishes-with-non-empty-stash
@@ -105,6 +111,12 @@ Feature: git sync --all: handling merge conflicts between feature branch and mai
       | feature2 | local and remote | feature2 commit                   | feature2_file    |
       |          |                  | main commit                       | conflicting_file |
       |          |                  | Merge branch 'main' into feature2 |                  |
+    And now I have the following committed files
+      | BRANCH   | FILES            | CONTENT          |
+      | main     | conflicting_file | main content     |
+      | feature1 | conflicting_file | resolved content |
+      | feature2 | conflicting_file | main content     |
+      | feature2 | feature2_file    | feature2 content |
 
 
   Scenario: continuing after resolving the conflicts and committing
