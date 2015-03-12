@@ -50,6 +50,12 @@ Feature: git sync --all: handling merge conflicts between feature branch and mai
       | feature1 | local            | feature1 local commit  | conflicting_file     |
       |          | remote           | feature1 remote commit | feature1_remote_file |
       | feature2 | local and remote | feature2 commit        | feature2_file        |
+    And now I have the following committed files
+      | BRANCH   | NAME                 | CONTENT                 |
+      | main     | conflicting_file     | main content            |
+      | feature1 | conflicting_file     | feature1 local content  |
+      | feature1 | feature1_remote_file | feature1 remote content |
+      | feature2 | feature2_file        | feature2 content        |
 
 
   Scenario: skipping

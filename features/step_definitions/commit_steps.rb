@@ -2,8 +2,10 @@ Given(/^the following commits? exists? in (my|my coworker's) repository$/) do |w
   user = (who == 'my') ? :developer : :coworker
   commits_table.map_headers!(&:downcase)
   @initial_commits_table = commits_table.clone
+  @original_files = nil
   in_repository user do
     create_commits commits_table.hashes
+    @original_files = files_in_branches
   end
 end
 
